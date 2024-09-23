@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뉴스 크롤링 결과</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        h1 { text-align: center; }
+        .news-section { margin-bottom: 20px; }
+        .news-item { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+        .news-title { font-size: 1.2em; font-weight: bold; }
+        .news-link { color: blue; }
+        .news-press { font-size: 0.9em; color: gray; }
+    </style>
+</head>
+<body>
+    <h1>뉴스 크롤링 결과</h1>
+    <div id="news-content"></div>
+
+    <script>
+        const newsData = {news_data};
+        const newsContent = document.getElementById('news-content');
+
+        newsData.forEach(item => {
+            const newsDiv = document.createElement('div');
+            newsDiv.className = 'news-item';
+            newsDiv.innerHTML = `
+                <div class="news-title">${item.title}</div>
+                <a class="news-link" href="${item.link}" target="_blank">${item.link}</a>
+                <div class="news-press">${item.press}</div>
+            `;
+            newsContent.appendChild(newsDiv);
+        });
+    </script>
+</body>
+</html>
