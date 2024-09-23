@@ -7,66 +7,70 @@
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
         h1 { text-align: center; }
-        pre { white-space: pre-wrap; word-wrap: break-word; }
+        .news-item { margin-bottom: 10px; }
+        .pagination { text-align: center; margin-top: 20px; }
+        .pagination a { margin: 0 5px; text-decoration: none; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
     <h1>뉴스 크롤링 결과</h1>
-    <pre>제목 : 2024.09.24
-링크 : 시작합니다.
-언론사 : 오늘의 보훈 뉴스
+    <div id="news-content"></div>
+    <div class="pagination" id="pagination"></div>
 
-제목 : 우리은행, 국가보훈등록증 비대면 거래 도입
-링크 : https://www.newsis.com/view/NISX20240923_0002895104
-언론사 : 뉴시스
+    <script>
+        const newsData = [
+            // 여기에 크롤링한 데이터를 JSON 형식으로 추가하세요.
+        ];
 
-제목 : 우리은행, 국가보훈등록증 비대면 진위확인 첫 도입
-링크 : https://biz.sbs.co.kr/article_hub/20000192848?division=NAVER
-언론사 : SBS Biz
+        const newsContent = document.getElementById('news-content');
+        const pagination = document.getElementById('pagination');
 
-제목 : 보훈부·조선대학교 "동문 출신 '6·25참전 호국영웅 명비 건립' 업무협약 체결
-링크 : http://www.fnnews.com/news/202409221555054617
-언론사 : 파이낸셜뉴스
+        const itemsPerPage = 10; // 페이지당 항목 수
+        let currentPage = 1;
 
-제목 : 광주시, 참전·독립·보훈수당 인상
-링크 : http://www.jndn.com/article.php?aid=1726995483394953003
-언론사 : 전남매일
+        function displayNews(page) {
+            newsContent.innerHTML = ''; // 현재 콘텐츠 초기화
 
-제목 : 고양시, 한국보훈복지의료공단과 업무협약 체결
-링크 : https://www.kgnews.co.kr/news/article.html?no=810396
-언론사 : 경기신문
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedNews = newsData.slice(startIndex, endIndex);
 
-제목 : 고양시, 한국보훈복지의료공단과 업무협약 체결
-링크 : https://view.asiae.co.kr/article/2024092017143461252
-언론사 : 아시아경제
+            paginatedNews.forEach(item => {
+                const newsDiv = document.createElement('div');
+                newsDiv.className = 'news-item';
+                newsDiv.innerHTML = `
+                    <strong>${item.title}</strong><br>
+                    <a href="${item.link}" target="_blank">${item.link}</a><br>
+                    <span>${item.press}</span>
+                `;
+                newsContent.appendChild(newsDiv);
+            });
 
-제목 : 광주시, 참전·독립·보훈 수당 '평균 수준'으로 인상
-링크 : https://www.yna.co.kr/view/AKR20240920058800054?input=1195m
-언론사 : 연합뉴스
+            updatePagination();
+        }
 
-제목 : 경상북도호국보훈재단 통일전 해설사 2기 양성과정 개설
-링크 : https://www.dkilbo.com/news/articleView.html?idxno=461797
-언론사 : 대경일보
+        function updatePagination() {
+            pagination.innerHTML = ''; // 현재 페이지네이션 초기화
+            const totalPages = Math.ceil(newsData.length / itemsPerPage);
 
-제목 : 우리銀, 국가보훈등록증 비대면 거래 금융권 첫 도입
-링크 : https://www.bigtanews.co.kr/article/view/big202409230010
-언론사 : 빅터뉴스
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLink = document.createElement('a');
+                pageLink.href = '#';
+                pageLink.innerHTML = i;
+                pageLink.onclick = function() {
+                    currentPage = i;
+                    displayNews(currentPage);
+                };
+                if (i === currentPage) {
+                    pageLink.style.fontWeight = 'bold'; // 현재 페이지 강조
+                }
+                pagination.appendChild(pageLink);
+            }
+        }
 
-제목 : 목송산업개발㈜, 국가보훈부 장관 표창 수상
-링크 : http://www.jnilbo.com/74894377276
-언론사 : 전남일보
-
-제목 : 맥도날드, 추석 맞아 원주보훈요양원에 '행복의 버거' 전달
-링크 : https://www.news1.kr/industry/distribution/5543587
-언론사 : 뉴스1
-
-제목 : 우리은행, 국가보훈등록증 비대면 거래 금융권 첫 도입 '신분증 위변조 탐지∙안면 인식 기술 적용'
-링크 : https://www.nbnews.kr/news/articleView.html?idxno=98025
-언론사 : NBN NEWS
-
-제목 : 대구보훈병원 찾은 강정애 장관
-링크 : https://www.news1.kr/photos/6886487
-언론사 : 뉴스1
-</pre>
+        // 페이지 로드 시 첫 페이지 표시
+        displayNews(currentPage);
+    </script>
 </body>
 </html>
