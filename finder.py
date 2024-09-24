@@ -35,28 +35,28 @@ def parse_news(html):
                 news_list.append((title, link, press))
     return news_list
 
-def save_to_file(news_items):
+def save_to_file(news_items, keyword, page):
     # 파일 비우기 및 저장
-    with open(output_file, 'w', encoding='utf-8') as f:
+    with open(output_file, 'a', encoding='utf-8') as f:
+        f.write(f"{keyword} / {page}페이지\n\n")
         for title, link, press in news_items:
             f.write(f"제목 : {title}\n링크 : {link}\n언론사 : {press}\n\n")
-
+        f.write("------------------------------------------------------\n\n")
 def main():
-    all_news = []
-
     # 크롤링하기 전에 파일을 비우기
     open(output_file, 'w').close()  # 파일 비우기
 
     for keyword in keywords:
         print(f"Fetching news for keyword: {keyword}")
-        for page in range(1, 3):  # 최대 2페이지
-            html = fetch_news(keyword, page)
-            news_items = parse_news(html)
-            all_news.extend(news_items)
+        for page in range(1, 3):                    # (n, m)일 때, 최대 m-1페이지
+            all_news = []
+            html = fetch_news(keyword, page)        # 뉴스 검색
+            news_items = parse_news(html)           # 크롤링
+            all_news.extend(news_items)             # 크롤링 결과 리스트로 저장
+            save_to_file(all_news, keyword, page)   # txt 파일로 저장
             time.sleep(1)
 
-    # 파일로 저장
-    save_to_file(all_news)
+
     print(f"\n크롤링 결과가 {output_file}에 저장되었습니다.")
 
 if __name__ == "__main__":
