@@ -32,6 +32,9 @@ def parse_news(html):
             if title and link and press:
                 # 큰 따옴표와 작은 따옴표 제거
                 title = title.replace('"', '').replace("'", "")
+
+                # ...뉴스사 "선정" 삭제
+                press = press.replace(" 선정", "")
                 news_list.append((title, link, press))
     return news_list
 
