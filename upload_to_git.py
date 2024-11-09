@@ -10,6 +10,7 @@ HTML_FILE_PATH = "index.html"  # HTML 파일 경로
 BRANCH_NAME = "main"  # 브랜치 이름
 TEXT_FILE_PATH = "upload.txt"  # 크롤링한 텍스트 파일 경로
 
+change = True
 
 def read_txt_file():
     with open(TEXT_FILE_PATH, 'r', encoding='utf-8') as f:
@@ -41,8 +42,14 @@ def update_html_file(template, content):
     # 현재 날짜 및 시간 추가
     current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     updated_template = template.replace('const newsData = [];', f'const newsData = {json_data};')
-    updated_template = updated_template.replace('<div class="timestamp" id="timestamp"></div>',
-                                                f'<div class="timestamp" id="timestamp">최신화: {current_datetime}</div>')
+    #크롤링 최신화 점검 여부 확인
+    updated_template = updated_template.replace('<div class="timestamp" id="timestamp-now"></div',
+                                                f'<div class="timestamp" id="timestamp-now">최신화 확인 : {current_datetime}</div>')
+
+    #크롤링 데이터 중 추가/삭제된 부분이 있다면...
+    if (change == True):
+        updated_template = updated_template.replace('<div class="timestamp" id="timestamp"></div>',
+                                                    f'<div class="timestamp" id="timestamp">최신화 : {current_datetime}</div>')
 
     return updated_template
 
@@ -68,12 +75,19 @@ def update_github_file(content):
 
 
 def main():
+    global change
+    
     # 텍스트 파일 읽기
     content = read_txt_file()
 
     # HTML 템플릿 읽기
     template = read_html_template()
 
+    #크롤링 데이터 중 추가/삭제된 부분이 있는가?
+    isChange = input("Change is True(Y/N) : ")
+    if (isChange.upper() == "N"):
+        change = not change
+        
     # HTML 파일 내용 생성
     html_content = update_html_file(template, content)
 
