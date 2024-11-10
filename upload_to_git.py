@@ -7,7 +7,7 @@ GITHUB_TOKEN = "Censored"  # 개인 액세스 토큰 입력
 REPO_OWNER = "Grassyeochi"  # GitHub 사용자명
 REPO_NAME = "crawling_news"  # 저장소 이름
 HTML_FILE_PATH = "index.html"  # HTML 파일 경로
-BRANCH_NAME = "main"  # 브랜치 이름
+BRANCH_NAME = "release"  # 브랜치 이름
 TEXT_FILE_PATH = "upload.txt"  # 크롤링한 텍스트 파일 경로
 
 change = True
