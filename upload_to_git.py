@@ -70,7 +70,7 @@ def update_github_file(content):
 
     # 파일 업데이트
     data = {
-        "message": "Update HTML file with latest news data",
+        "message": "뉴스 데이터 최신화를 위해 HTML 코드를 수정 합니다.",
         "content": base64.b64encode(content.encode('utf-8')).decode('utf-8'),
         "sha": sha,
         "branch": BRANCH_NAME
