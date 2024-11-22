@@ -40,16 +40,22 @@ def update_html_file(template, content):
     json_data = str(news_items).replace("'", '"')
 
     # 현재 날짜 및 시간 추가
+    with open("timetable.txt", "r", encoding="utf-8") as f:
+        latest_datetime = f.readline()
+
     current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     updated_template = template.replace('const newsData = [];', f'const newsData = {json_data};')
-    #크롤링 최신화 점검 여부 확인
     updated_template = updated_template.replace('<div class="timestamp" id="timestamp-now"></div',
                                                 f'<div class="timestamp" id="timestamp-now">최신화 확인 : {current_datetime}</div>')
 
-    #크롤링 데이터 중 추가/삭제된 부분이 있다면...
     if (change == True):
         updated_template = updated_template.replace('<div class="timestamp" id="timestamp"></div>',
                                                     f'<div class="timestamp" id="timestamp">최신화 : {current_datetime}</div>')
+        with open("timetable.txt", "w", encoding="utf-8") as f:
+            f.write(current_datetime)
+    else:
+        updated_template = updated_template.replace('<div class="timestamp" id="timestamp"></div>',
+                                                    f'<div class="timestamp" id="timestamp">최신화 : {latest_datetime}</div>')
 
     return updated_template
 
