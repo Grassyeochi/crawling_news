@@ -1,25 +1,28 @@
 import requests
 import base64
 from datetime import datetime
+from pathlib import Path
+import json
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # GitHub 설정
-GITHUB_TOKEN = "Censored"  # 개인 액세스 토큰 입력
-REPO_OWNER = "Grassyeochi"  # GitHub 사용자명
-REPO_NAME = "crawling_news"  # 저장소 이름
-HTML_FILE_PATH = "index.html"  # HTML 파일 경로
-BRANCH_NAME = "release"  # 브랜치 이름
-TEXT_FILE_PATH = "upload.txt"  # 크롤링한 텍스트 파일 경로
-
+try:
+    with open(BASE_DIR / 'secrets.json') as f:
+        secret_data = json.load(f)
+except FileNotFoundError:
+    secret_data = {}
 change = True
 
 def read_txt_file():
-    with open(TEXT_FILE_PATH, 'r', encoding='utf-8') as f:
+    with open(secret_data.get('TEXT_FILE_PATH'), 'r', encoding='utf-8') as f:
         content = f.read()
     return content
 
 
 def read_html_template():
-    with open(HTML_FILE_PATH, 'r', encoding='utf-8') as f:
+    with open(secret_data.get('TEXT_FILE_PATH'), 'r', encoding='utf-8') as f:
         template = f.read()
     return template
 
@@ -61,10 +64,10 @@ def update_html_file(template, content):
 
 
 def update_github_file(content):
-    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{HTML_FILE_PATH}"
+    url = f"https://api.github.com/repos/{secret_data.get('REPO_OWNER')}/{secret_data.get('REPO_NAME')}/contents/{secret_data.get('HTML_FILE_PATH')}"
 
     # 현재 파일의 SHA 가져오기
-    response = requests.get(url, headers={'Authorization': f'token {GITHUB_TOKEN}'})
+    response = requests.get(url, headers={'Authorization': f'token {secret_data.get("GITHUB_TOKEN")}'})
     response.raise_for_status()
     sha = response.json().get('sha')
 
@@ -73,9 +76,9 @@ def update_github_file(content):
         "message": "뉴스 데이터 최신화를 위해 HTML 코드를 수정 합니다.",
         "content": base64.b64encode(content.encode('utf-8')).decode('utf-8'),
         "sha": sha,
-        "branch": BRANCH_NAME
+        "branch": secret_data.get("BRANCH_NAME")
     }
-    response = requests.put(url, headers={'Authorization': f'token {GITHUB_TOKEN}'}, json=data)
+    response = requests.put(url, headers={'Authorization': f'token {secret_data.get("GITHUB_TOKEN")}'}, json=data)
     response.raise_for_status()
     print("HTML 파일이 GitHub에 업데이트되었습니다.")
 
