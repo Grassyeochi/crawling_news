@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import time
 
 # 검색 키워드 목록
-keywords = ["보훈", "피해 장병", "군대", "복지", "군 병원", "군 사건사고", "서울시청년부상제대군인"]
+keywords = ["보훈", "피해 장병", "군대", "청년 복지", "군 병원", "군 사건사고", "서울시청년부상제대군인"]
 
 # 결과를 저장할 파일
 output_file = "crawling.txt"
