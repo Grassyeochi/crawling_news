@@ -1,1 +1,6 @@
+.venv
+
 secrets.json
+
+crawling.txt
+upload.txt
